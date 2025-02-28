@@ -10,7 +10,7 @@ module.exports.renderNewForm=(req,res)=>{
   };
 //Show Route
 module.exports.showListing=async (req,res,next)=>{
-    let {id}=req.params;
+   try{ let {id}=req.params;
     const listing=await Listing.findById(id).populate({path:"reviews",
       populate:{
         path:"author",
@@ -22,6 +22,11 @@ module.exports.showListing=async (req,res,next)=>{
     }
 
     res.render("listings/show.ejs",{listing});
+      }
+    catch(err){
+        req.flash('error', 'Something went wrong!');
+        res.redirect('/listings');
+    }
  };
 //Create Route
 module.exports.createListing=async(req,res,next)=>{
